@@ -2,9 +2,11 @@ package kubemap
 
 import (
 	"go.uber.org/zap"
+	apps_v1 "k8s.io/api/apps/v1"
 	apps_v1beta2 "k8s.io/api/apps/v1beta2"
 	core_v1 "k8s.io/api/core/v1"
 	ext_v1beta1 "k8s.io/api/extensions/v1beta1"
+	network_v1beta1 "k8s.io/api/networking/v1beta1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 )
@@ -12,11 +14,14 @@ import (
 //KubeResources is collection of different types of k8s resource for mapping.
 //ToDo : Add support for other k8s resources.
 type KubeResources struct {
-	Ingresses   []ext_v1beta1.Ingress
-	Services    []core_v1.Service
-	Deployments []apps_v1beta2.Deployment
-	ReplicaSets []ext_v1beta1.ReplicaSet
-	Pods        []core_v1.Pod
+	Ingresses     []ext_v1beta1.Ingress
+	IngressesNW   []network_v1beta1.Ingress
+	Services      []core_v1.Service
+	Deployments   []apps_v1beta2.Deployment
+	DeploymentsV1 []apps_v1.Deployment
+	ReplicaSets   []ext_v1beta1.ReplicaSet
+	ReplicaSetsV1 []apps_v1.ReplicaSet
+	Pods          []core_v1.Pod
 }
 
 //MappedResource is final mapped output of interlinked K8s resources
@@ -30,12 +35,15 @@ type MappedResource struct {
 
 //Kube ...
 type Kube struct {
-	Ingresses   []ext_v1beta1.Ingress     `json:"ingresses,omitempty"`
-	Services    []core_v1.Service         `json:"services,omitempty"`
-	Deployments []apps_v1beta2.Deployment `json:"deployments,omitempty"`
-	ReplicaSets []ext_v1beta1.ReplicaSet  `json:"replicaSets,omitempty"`
-	Pods        []core_v1.Pod             `json:"pods,omitempty"`
-	Events      []core_v1.Event           `json:"events,omitempty"`
+	Ingresses     []ext_v1beta1.Ingress     `json:"ingresses,omitempty"`
+	IngressesNW   []network_v1beta1.Ingress `json:"ingressesNW,omitempty"`
+	Services      []core_v1.Service         `json:"services,omitempty"`
+	Deployments   []apps_v1beta2.Deployment `json:"deployments,omitempty"`
+	DeploymentsV1 []apps_v1.Deployment      `json:"deploymentsV1,omitempty"`
+	ReplicaSets   []ext_v1beta1.ReplicaSet  `json:"replicaSets,omitempty"`
+	ReplicaSetsV1 []apps_v1.ReplicaSet      `json:"replicaSetsV1,omitempty"`
+	Pods          []core_v1.Pod             `json:"pods,omitempty"`
+	Events        []core_v1.Event           `json:"events,omitempty"`
 }
 
 //MappedResources returns set of common labels consisting mapped k8s resources.
